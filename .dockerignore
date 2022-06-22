@@ -1,0 +1,14 @@
+*
+
+!admin/
+!demos/
+!dev/
+!dist/
+!fake-keys/
+!config.json
+!docker-entrypoint.sh
+!LICENSE
+!logs.json
+!package-lock.json
+!package.json
+!server.js
