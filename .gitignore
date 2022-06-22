@@ -25,4 +25,3 @@ lib-cov
 config.gypi
 CVS
 npm-debug.log
-package-lock.json
