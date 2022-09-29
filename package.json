@@ -56,7 +56,7 @@
     "recordrtc": "latest",
     "rtcmulticonnection-server": "latest",
     "socket.io": "^4.5.2",
-    "webrtc-adapter": "latest"
+    "webrtc-adapter": "^8.1.2"
   },
   "analyze": false,
   "license": "MIT",
