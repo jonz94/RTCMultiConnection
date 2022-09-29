@@ -1,9 +1,9 @@
 'use strict';
 
-// Last time updated: 2020-08-26 8:55:13 AM UTC
+// Last time updated: 2022-09-29 8:45:49 AM UTC
 
 // _________________________
-// RTCMultiConnection v3.7.0
+// RTCMultiConnection v3.7.1-0
 
 // Open-Sourced: https://github.com/muaz-khan/RTCMultiConnection
 
@@ -905,10 +905,10 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
     'use strict';
 
-    // Last Updated On: 2019-01-10 5:32:55 AM UTC
+    // Last Updated On: 2020-08-12 11:18:41 AM UTC
 
     // ________________
-    // DetectRTC v1.3.9
+    // DetectRTC v1.4.1
 
     // Open-Sourced: https://github.com/muaz-khan/DetectRTC
 
@@ -985,7 +985,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
 
         var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-        var isFirefox = typeof window.InstallTrigger !== 'undefined';
+        var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && ('netscape' in window) && / rv:/.test(navigator.userAgent);
         var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         var isChrome = !!window.chrome && !isOpera;
         var isIE = typeof document !== 'undefined' && !!document.documentMode && !isEdge;
@@ -1000,12 +1000,6 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             var fullVersion = '' + parseFloat(navigator.appVersion);
             var majorVersion = parseInt(navigator.appVersion, 10);
             var nameOffset, verOffset, ix;
-
-            // both and safri and chrome has same userAgent
-            if (isSafari && !isChrome && nAgt.indexOf('CriOS') !== -1) {
-                isSafari = false;
-                isChrome = true;
-            }
 
             // In Opera, the true version is after 'Opera' or after 'Version'
             if (isOpera) {
@@ -1038,17 +1032,28 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             }
             // In Safari, the true version is after 'Safari' or after 'Version' 
             else if (isSafari) {
-                verOffset = nAgt.indexOf('Safari');
+                // both and safri and chrome has same userAgent
+                if (nAgt.indexOf('CriOS') !== -1) {
+                    verOffset = nAgt.indexOf('CriOS');
+                    browserName = 'Chrome';
+                    fullVersion = nAgt.substring(verOffset + 6);
+                } else if (nAgt.indexOf('FxiOS') !== -1) {
+                    verOffset = nAgt.indexOf('FxiOS');
+                    browserName = 'Firefox';
+                    fullVersion = nAgt.substring(verOffset + 6);
+                } else {
+                    verOffset = nAgt.indexOf('Safari');
 
-                browserName = 'Safari';
-                fullVersion = nAgt.substring(verOffset + 7);
+                    browserName = 'Safari';
+                    fullVersion = nAgt.substring(verOffset + 7);
 
-                if ((verOffset = nAgt.indexOf('Version')) !== -1) {
-                    fullVersion = nAgt.substring(verOffset + 8);
-                }
+                    if ((verOffset = nAgt.indexOf('Version')) !== -1) {
+                        fullVersion = nAgt.substring(verOffset + 8);
+                    }
 
-                if (navigator.userAgent.indexOf('Version/') !== -1) {
-                    fullVersion = navigator.userAgent.split('Version/')[1].split(' ')[0];
+                    if (navigator.userAgent.indexOf('Version/') !== -1) {
+                        fullVersion = navigator.userAgent.split('Version/')[1].split(' ')[0];
+                    }
                 }
             }
             // In Firefox, the true version is after 'Firefox' 
@@ -1257,6 +1262,9 @@ var RTCMultiConnection = function(roomid, forceOptions) {
 
             var os = unknown;
             var clientStrings = [{
+                s: 'Chrome OS',
+                r: /CrOS/
+            }, {
                 s: 'Windows 10',
                 r: /(Windows 10.0|Windows NT 10.0)/
             }, {
@@ -1365,7 +1373,9 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 case 'iOS':
                     if (/OS (\d+)_(\d+)_?(\d+)?/.test(nAgt)) {
                         osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
-                        osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                        if (osVersion && osVersion.length > 3) {
+                            osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                        }
                     }
                     break;
             }
@@ -1635,6 +1645,12 @@ var RTCMultiConnection = function(roomid, forceOptions) {
             var alreadyUsedDevices = {};
 
             navigator.enumerateDevices(function(devices) {
+                MediaDevices = [];
+
+                audioInputDevices = [];
+                audioOutputDevices = [];
+                videoInputDevices = [];
+
                 devices.forEach(function(_device) {
                     var device = {};
                     for (var d in _device) {
@@ -1788,8 +1804,12 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         } else if (DetectRTC.browser.isFirefox && DetectRTC.browser.version >= 34) {
             isScreenCapturingSupported = true;
         } else if (DetectRTC.browser.isEdge && DetectRTC.browser.version >= 17) {
-            isScreenCapturingSupported = true; // navigator.getDisplayMedia
+            isScreenCapturingSupported = true;
         } else if (DetectRTC.osName === 'Android' && DetectRTC.browser.isChrome) {
+            isScreenCapturingSupported = true;
+        }
+
+        if (!!navigator.getDisplayMedia || (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia)) {
             isScreenCapturingSupported = true;
         }
 
@@ -2013,7 +2033,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         DetectRTC.isPromisesSupported = !!('Promise' in window);
 
         // version is generated by "grunt"
-        DetectRTC.version = '1.3.9';
+        DetectRTC.version = '1.4.1';
 
         if (typeof DetectRTC === 'undefined') {
             window.DetectRTC = {};
@@ -5837,7 +5857,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
         };
 
         connection.trickleIce = true;
-        connection.version = '3.7.0';
+        connection.version = '3.7.1-0';
 
         connection.onSettingLocalDescription = function(event) {
             if (connection.enableLogs) {

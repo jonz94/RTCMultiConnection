@@ -1,13 +1,14 @@
 {
   "name": "rtcmulticonnection",
   "preferGlobal": false,
-  "version": "3.7.1",
+  "version": "3.7.1-0",
   "description": "This is a fork from https://github.com/muaz-khan/RTCMultiConnection",
   "repository": {
     "type": "git",
     "url": "https://github.com/jonz94/RTCMultiConnection.git"
   },
   "scripts": {
+    "build": "grunt",
     "start": "node server.js"
   },
   "engines": {
