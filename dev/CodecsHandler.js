@@ -300,10 +300,6 @@ var CodecsHandler = (function() {
             appendOpusNext += '; usedtx=' + params.usedtx;
         }
 
-        if (typeof params.maxptime != 'undefined') {
-            appendOpusNext += '\r\na=maxptime:' + params.maxptime;
-        }
-
         sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
 
         sdp = sdpLines.join('\r\n');

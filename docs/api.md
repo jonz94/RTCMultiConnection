@@ -661,8 +661,7 @@ connection.processSdp = function(sdp) {
         'maxplaybackrate': connection.bandwidth.audio * 1000 * 8,
         //'cbr': 1,
         //'useinbandfec': 1,
-        // 'usedtx': 1,
-        'maxptime': 3
+        // 'usedtx': 1
     });
 
     return sdp;

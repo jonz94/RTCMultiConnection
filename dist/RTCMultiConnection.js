@@ -1,6 +1,6 @@
 'use strict';
 
-// Last time updated: 2022-10-20 8:10:15 AM UTC
+// Last time updated: 2022-11-10 11:10:43 PM UTC
 
 // _________________________
 // RTCMultiConnection v3.7.1-1
@@ -3310,10 +3310,6 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 appendOpusNext += '; usedtx=' + params.usedtx;
             }
 
-            if (typeof params.maxptime != 'undefined') {
-                appendOpusNext += '\r\na=maxptime:' + params.maxptime;
-            }
-
             sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
 
             sdp = sdpLines.join('\r\n');
@@ -4772,8 +4768,7 @@ var RTCMultiConnection = function(roomid, forceOptions) {
                 sdp = CodecsHandler.setOpusAttributes(sdp, {
                     maxaveragebitrate: connection.bandwidth.audio * 8 * 1024,
                     maxplaybackrate: connection.bandwidth.audio * 8 * 1024,
-                    stereo: 1,
-                    maxptime: 3
+                    stereo: 1
                 });
             }
 
